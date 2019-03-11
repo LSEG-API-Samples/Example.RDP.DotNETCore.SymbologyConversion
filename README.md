@@ -475,7 +475,7 @@ Export to CSV File:csvoutputIBM.csv True
 
 Signin to EDP(Elektron Data Platform) Press Ctrl+C to cancel
 =============================
-Enter Username:GE-A-01103867-3-1175
+Enter Username:GE-A-01103xxxxxxx
 Enter Password:*****************
 =============================
 Logging in to the EDP server, please wait
