@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+   <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RuntimeIdentifiers>win7-x64;win10-x64;osx-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
+    <Authors>Moragodkrit Chumsri</Authors>
+    <Company>Refinitiv</Company>
+    <Product>EDP Symbology Convert Example</Product>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>EDPSymbologyConvert</AssemblyName>
+    <RootNamespace>EDPSymbologyConvert</RootNamespace>
+  </PropertyGroup>
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <DebugType>portable</DebugType>
+  <DebugSymbols>true</DebugSymbols>
+  <Optimize>true</Optimize>
+</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EDPOauth2\EDPAuthOauth2.csproj" />
+    <ProjectReference Include="..\EDPSymbology\EDPSymbology.csproj" />
+  </ItemGroup>
+<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Copy SourceFiles="$(ProjectDir)\request.json" DestinationFolder="$(TargetDir)" Condition="'$(OS)' == 'Unix'" />
+</Target>
+</Project>

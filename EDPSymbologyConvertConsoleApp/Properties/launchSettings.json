@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EDPSymbologyConvertConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": " --universe IBM.N,037833100,TH0001010014 -o csvoutputIBM.csv --verbose"
+    }
+  }
+}
