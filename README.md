@@ -49,7 +49,7 @@ https://api.refinitiv.com/data/symbology/beta1/convert?universe=<Identifier1>,<I
 
 #### POST REQUEST
 
-````json
+```json
 Base URL:"https://api.refinitiv.com/data/symbology/beta1"
 Endpoint URL: "<Base URL>/convert"
 Media Type: "application/json"
@@ -398,7 +398,7 @@ Read convert parameter from Json file:
 
 ### Compile and Build the example application
 
-You can download the application from Github and then compile and build it on Windows, Linux or macOS according to [.NET Core supported platform](https://dotnet.microsoft.com/download).
+You can download the application from [Github](https://github.com/TR-API-Samples/Example.EDP.DotNETCore.SymbologyConversion.git) and then compile and build it on Windows, Linux or macOS according to [.NET Core supported platform](https://dotnet.microsoft.com/download).
 You have to install [.NET Core SDK 2.x](https://dotnet.microsoft.com/download) and then open solution file **edpapi.sln** with Visual Studio 2017.
 Or you can compile and build the example using **dotnet buiild** or publish the project using **dotnet publish**  command.
 
@@ -407,7 +407,7 @@ You can follow the following step to publish the example project.
 1.) Clone edpapi project from github.
 
 ```
-$ git clone https://github.../edpapi.git
+$ git clone https://github.com/TR-API-Samples/Example.EDP.DotNETCore.SymbologyConversion.git
 ```
 
 2.) Go to folder EDPSymbologyConvertConsoleApp
