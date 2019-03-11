@@ -8,7 +8,7 @@ There are two parts in this article the first part is detailed about the Symbolo
 
 ## Prerequisites
 
-* Understand a concepts of EDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+* Understand concepts of EDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
 
 Required software components:
 
@@ -22,7 +22,7 @@ Optional software components:
 
 ## Symbology Convert Method
 
-The symbology convert method supports two ways for converting and retrieving symbology data:
+The symbology convert method supports two ways of converting and retrieving symbology data:
 
 1. With no specified list of return fields.
 2. With a specified list of return fields.
@@ -33,11 +33,11 @@ The convert method takes two parameters:
 
 * **Universe** (required): This takes a comma-separated list of input symbols or identifiers. Currently, maximum input symbols in the list are **100** items.
 
-* **To** (optional): This takes a comma-separated list of return fields. If not specified the convert method returns all matching return fields. Please refer to  [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) page for available field list and Json schema for the service.
+* **To** (optional): This takes a comma-separated list of return fields. If not specified the convert method returns all matching return fields. Please refer to  [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) page for available field list and JSON schema for the service.
 
 ### Model
 
-Below is a models of GET Request and Post Request message. Note that the endpoint we use in this article based on the beta version of the EDP.
+Below is a model of a GET Request and Post Request message. Note that the endpoint we use in this article based on the beta version of the EDP.
 
 #### GET REQUEST
 
@@ -74,7 +74,7 @@ Request Body:
 
 ### Conversion with No Field List
 
-When no field list is specified for the **To** parameter the convert method converts a symbol and returns all existing symbol types and reference data fields. Below is a sample of both a Get request and a Post request with no specified field list. Note that the Url endpoint provided based on beta version of the service, it can be changed in the future after released.
+When no field list is specified for the **To** parameter the convert method converts a symbol and returns all existing symbol types and reference data fields. Below is a sample of both a Get request and a Post request with no specified field list. Note that the Url endpoint provided based on a beta version of the service, it can be changed in the future after released.
 
 #### GET REQUEST Sample
 
@@ -121,11 +121,11 @@ JSON request body:
 
 Basically, the collection format of the Conversion response is Comma-separated values(CSV) according to Swagger JSON scheme for Symbology Convert from the [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) website.
 
-The following JSON data is a sample of response message from the Convert method. Please refer to a full JSON scheme for an additional field provided by the service.
+The following JSON data is a sample of the response message from the Convert method. Please refer to a full JSON scheme for an additional field provided by the service.
 
 #### Json Response Message Sample
 
-```Json
+```JSON
 {
   "data": [
     [
@@ -187,10 +187,9 @@ The following JSON data is a sample of response message from the Convert method.
 }
 ```
 
-The response of the convert method containing a JSON object named **data** and **headers**. Actually, the data object is a collection or list of the array of nullable dynamic type. The array is actual data for each input instrument or symbol in the request message. And the headers is a collection of header object describing the meaning of element inside the array.
+The response of the convert method containing a JSON object named **data** and **headers**. Actually, the data object is a collection or list of the array of nullable dynamic type. The array is actual data for each input instrument or symbol in the request message. And the header is a collection of header object describing the meaning of element inside the array.
 
-For instance,
-  From the sample response message, the data[1] represents actual data for instrument "TRI.N" and the value of data[1][2] is a string "CA8849037095" which represents an ISIN according to the value of headers[2].title.
+For instance, from the sample response message, the data[1] represents actual data for instrument "TRI.N" and the value of data[1][2] is a string "CA8849037095" which represents an ISIN according to the value of headers[2].title.
 
 The order of array inside the data associated with the order of an element in headers object. Hence, the application has to iterate through the data collection to get a value of each symbol identifier. And then get the data definition for each element in the array by parsing the headers object to get the header description and its title.
 
@@ -202,24 +201,24 @@ This section describing the implementation of .NET Core example which is a conso
 
 ### Create Data Model
 
-Basically, EDP provide Swagger JSON scheme on the [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) website. Developer can download the JSON scheme and use it as a reference to create a request and response message. The JSON scheme also describes the data model used by the services. Below screenshot is the Symbology service Swagger page.
+Basically, EDP provides Swagger JSON scheme on the [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) website. The developer can download the JSON scheme and use it as a reference to create a request and response message. The JSON scheme also describes the data model used by the services. Below screenshot is the Symbology service Swagger page.
 
 ![Symbology Convert JSON Scheme](/images/swaggerjsonscheme.png)
 
 There are two steps the example used to request data from the Symbology Conversion service.
 
-1. Get Access Token from EDS Authentication Service as describing in the following [Page](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+1. Get Access Token from EDS Authentication Service as described in the following [Page](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
 2. Create JSON request body for Symbology convert method and then pass it to HttpClient class with the Access Token. And then send HTTP GET or Post to Symbology Conversion endpoint.
 
 This example uses the JSON scheme from EDS Authentication service and Symbology Conversion service to generate data model in .NET Core application. The example use [NSwagStudio tool](https://github.com/RSuter/NSwag/wiki/NSwagStudio) to generate CSharp Client and data models from the JSON Scheme files.
 
-Basically, the output from the NSwageStudio is a C# client class with a Data Models and its Enum values. The client classes basically provide an interface for application to request and manage the response. The client class uses a NewtonSoft JSON library to handle the JSON data. It can use the JSON library to serialize the object to JSON request and deserialize the response back to the Symbology object. The NSwagStudio automatically generate .NET async method for retrieving the data using Http Get or Http Post. Please refers to the instruction for using the NSWagStudio application from [NSWagStudio github page](https://github.com/RSuter/NSwag/wiki/NSwagStudio). Note that after generating the client class from JSON scheme, you might need to refactor the codes and modify the class name and enum value yourself to match with your application design.
+Basically, the output from the NSwageStudio is a C# client class with a Data Models and its Enum values. The client classes basically provide an interface for application to request and manage the response. The client class uses a NewtonSoft JSON library to handle the JSON data. It can use the JSON library to serialize the object to JSON request and deserialize the response back to the Symbology object. The NSwagStudio automatically generate .NET async method for retrieving the data using Http Get or Http Post. Please refers to the instruction for using the NSWagStudio application from [NSWagStudio GitHub page](https://github.com/RSuter/NSwag/wiki/NSwagStudio). Note that after generating the client class from JSON scheme, you might need to refactor the codes and modify the class name and enum value yourself to match with your application design.
 
 
 #### Interface and Class for EDS Authentication
 
-This example use SWagger JSON scheme to generate client class for EDS Authentication.
-The following class and interface was generated by NSWagStudio and it has been modified to use with EDS Authentication service and Symbology Conversion service.
+This example uses SWagger JSON scheme to generate client class for EDS Authentication.
+The following class and interface were generated by NSWagStudio and it has been modified to use with EDS Authentication service and Symbology Conversion service.
 
 **IAuthorizeClient** provides TokenAsync method for retrieving Token from the server.
 
@@ -235,7 +234,7 @@ The following class and interface was generated by NSWagStudio and it has been m
     }
 ```
 
-**Tokenresponse** returns when application calls TokenAsync to get Access Token. All class members represent the Token data.
+**Tokenresponse** returns when the application calls TokenAsync to get Access Token. All class members represent the Token data.
 
 ```CSharp
  public class Tokenresponse 
@@ -263,7 +262,7 @@ The following class and interface was generated by NSWagStudio and it has been m
 
 #### Interface and Class for Symbology Conversion
 
-**IEDPSymbologyClient** is an interfaces provide async methods for using HttpGet(GetConvertAsync) and HttpPost(GetConvertAsync) with the Symbology Conversion service. There is the ConvertRequest class the application used to pass a request message to the convert methods. Application will convert the class to JSON request body by serialize the ConvertRequest object to JSON data.
+**IEDPSymbologyClient** is an interfaces provide async methods for using HttpGet(GetConvertAsync) and HttpPost(GetConvertAsync) with the Symbology Conversion service. There is the ConvertRequest class the application used to pass a request message to the convert methods. The application will convert the class to JSON request body by serializing the ConvertRequest object to JSON data.
 
 ```CSharp
  public interface IEDPSymbologyClient
@@ -296,7 +295,9 @@ public class ConvertRequest
 }
 ```
 
-NSWagStudio also generate Symbology class which is a Data Model for Symbology response data. The GetConvertAsync and PostConvertAsync will return Symbology object to the application. It has to use Newtonsoft JSON library to deserialize the JSON response message to Symbology object. The application has to parse the data object and the headers from the Symbology object. We need to change the Data Property to use dynamic type to support various type including a null value.
+NSWagStudio also generates Symbology class which is a Data Model for Symbology response data. The GetConvertAsync and PostConvertAsync will return Symbology object to the application. It has to use the Newtonsoft JSON library to deserialize the JSON response message to Symbology object. 
+
+The application has to parse the data object and the headers from the Symbology object. We need to change the Data Property to use dynamic type to support various type including a null value.
 
 ```csharp
  public class Symbology
@@ -336,19 +337,19 @@ NSWagStudio also generate Symbology class which is a Data Model for Symbology re
 
 #### Input
 
-The example is console based application. There are two options for user to specify symbol/identifier list with a custom fields for the request message.
+The example is a console based application. There are two options for the user to specify the symbol/identifier list with custom fields for the request message.
 
 * Specify an identifier list with required fields via command line argument.
 * User can create JSON file containing a request message and then pass a file path to the command line argument. Then the application will create a request using parameters from the JSON file instead.
 
-At the beginning of the application, user has to enter username and password. Then the application will pass it to Authentication service to get a new Access Token.
+At the beginning of the application, the user has to enter the username and password. Then the application will pass it to Authentication service to get a new Access Token.
 
 #### Output
 
-For the output, the example will print the headers and its data to console output. The example also write the data to CSV file named "csvoutput.csv" by default.
+For the output, the example will print the headers and its data to console output. The example also writes the data to a CSV file named "csvoutput.csv" by default.
 
 The following list is the command line options generated by the application.
-It uses C# [Commandline Parser](https://github.com/commandlineparser/commandline) to generate the  help page and manage the command line arguments.
+It uses C# [Commandline Parser](https://github.com/commandlineparser/commandline) to generate the help page and manage the command line arguments.
 
 ```
 $ ./EDPSymbologyConvert --help
@@ -371,22 +372,18 @@ Read convert parameter from Json file:
 Read convert parameter from Json file:
   EDPSymbologyConvert --itemfile ./ISINList.txt --jsonfile ./request.json
 
-  -i, --universe     Required. List of symbol or item separate by comma. For example, -i
-                     IBM.N,037833100,TH0001010014 ,where 037833100 is CUSIP and TH0001010014 is
+  -i, --universe     Required. List of symbol or item separate by comma. 
+                     For  example, -i IBM.N,037833100,TH0001010014 ,where 037833100 is CUSIP and TH0001010014 is
                      ISIN.
 
-  -t, --to           List of field to returns from Symbology Convert service. Set it to empty
-                     string or not set, the service will return all available fields for the
-                     universe.
+  -t, --to           List of the field to returns from Symbology Convert service. 
+                     Set it to empty string or not set, the service will return all available fields.
 
-  -j, --jsonfile     Required. Allow the application to read use request parameter from json file
-                     instead. If set it override values from -i and -t.
+  -j, --jsonfile     Required. Allow the application to read request parameters from the JSON file instead. Set it to override values from -i and -t.
 
-  -o, --csvoutput    (Default: ./csvoutput.csv) File name or absolute path to csv file. It allows
-                     the application to write an output to CSV file specify in this option.
+  -o, --csvoutput    (Default: ./csvoutput.csv) File name or absolute path to CSV file. It allows the application to write output to CSV file specified in this option.
 
-  -f, --itemfile     (Default: ) If set, application will read universe list from the file instead.
-                     The format is multi-line item.
+  -f, --itemfile     (Default: ) If set, the application will read universe list from the file instead. The format is a multi-line item.
 
   --verbose          (Default: false) Print additional logs to console output.
 
@@ -404,7 +401,7 @@ Or you can compile and build the example using **dotnet buiild** or publish the 
 
 You can follow the following step to publish the example project.
 
-1.) Clone edpapi project from github.
+1.) Clone the example project from GitHub.
 
 ```
 $ git clone https://github.com/TR-API-Samples/Example.EDP.DotNETCore.SymbologyConversion.git
@@ -418,11 +415,11 @@ $ ls
 EDPSymbologyConvertConsoleApp.csproj  Program.cs  ProgramConfig.cs  ProgramCore.cs  Properties  request.json
 ```
 
-3.) Running **dotnet publish** command  to publish the project to native executable file and then you can run executable file directly without using __dotnet__ command on .Net Core supported OS. You can also share the app to another PC which running the same OS by copying all files under publish folder.
+3.) Running **dotnet publish** command to publish the project to the native executable file and then you can run executable file directly without using __dotnet__ command on .Net Core supported OS. You can also share the app to another PC which running the same OS by copying all files under the publishing folder.
 
 Please find more details about **dotnet publish** command from  [MSDN Document](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21).
 
-Below sample is a command to publish self-contained .NET core executeable file on Linux Ubuntu. It will generate execute file including required DLLs in the publish folder. For another OS you can change linux-x64 to a new one and you can find the list from [rid-catalog page](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog).
+Below sample is a command to publish self-contained .NET core executable file on Linux Ubuntu. It will generate execute file including required DLLs in the publish folder. For another OS you can change Linux-x64 to a new one and you can find the list from [rid-catalog page](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog).
 
 ```
 $ dotnet publish -c release -r linux-x64 -o publish/
@@ -447,13 +444,14 @@ Copyright (C) Microsoft Corporation. All rights reserved.
   EDPSymbologyConvertConsoleApp -> /home/mcca/edpapi/EDPSymbologyConvertConsoleApp/publish/
 
 ```
-The publish command generate application named **EDPSymbologyConvert** under folder "<Project Directory>/publish".
+The publish command generate application named **EDPSymbologyConvert** under the folder "<Project Directory>/publish".
 
 ## Running the example
 
 To test the example you must have a valid EDP username and password with permission to access Symbology Conversion service. 
-The following command used to request the data for RIC IBM.N, CUSIP 037833100 and ISIN TH0001010014. User may use -o to specify a new CSV file name to save the data.
-User may also use --verbose to print additional output such as the JSON request and response.
+The following command used to request the data for RIC **IBM.N**, CUSIP **037833100** and ISIN **TH0001010014**. A user may use -o to specify a new CSV file name to save the data.
+
+A user may also use **--verbose** to print additional output such as the JSON request and response.
 
 ```
 $ cd publish
@@ -461,7 +459,7 @@ $ ./EDPSymbologyConvert --universe IBM.N,037833100,TH0001010014 -o csvoutputIBM.
 
 ```
 
-Below sample is an output when you run the command line. It will returns three set of array inside the data object. Each of element inside the array is field value for the fields the application request from the server. In this case, it returns all available fields because user does not specify fields list.
+Below sample is output when you run the command line. It will return three sets of the array inside the data object. Each of element inside the array is field value for the fields the application request from the server. In this case, it returns all available fields because the user does not specify the fields list.
 
 ```
 $./EDPSymbologyConvert --universe IBM.N,037833100,TH0001010014 -o csvoutputIBM.csv --verbose
@@ -1021,7 +1019,7 @@ Writing data to csvoutputIBM.csv complete
 
 ## Summary
 
-This article explains the usage of Symbology Conversion service. It also provide example application to demonstrate the usage of Authentication and Symbology convert method. The example can convert a symbol or list of symbols to a specified output type. EDP API user can use the example application to test the service and apply the codes from the example with other service on the EDP.
+This article explains the usage of Symbology Conversion service. It also provides an example application to demonstrate the usage of Authentication and Symbology convert method. The example can convert a symbol or list of symbols to a specified output type. EDP API user can use the example application to test the service and apply the codes from the example with another service on the EDP.
 
 ## Contributing
 
