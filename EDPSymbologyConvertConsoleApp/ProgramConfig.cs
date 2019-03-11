@@ -86,12 +86,12 @@ namespace EDPSymbologyConvertConsoleApp
             public static IEnumerable<Example> Examples => new List<Example>
             {
                 new Example("Convert mulitple RICs", new Options {Universe = "IBM.N,MSFT.O,VOD.L"}),
-                new Example("Read convert parameter from Json file",
+                new Example("Convert mutiples types of symbols",
                     new Options {Universe = "IBM.N,037833100,TH0001010014"}),
                 new Example("Convert mulitple RICs to ISIN and CommonName",
                     new Options {Universe = "IBM.N,MSFT.O,VOD.L", ToEnum = "ISIN,CommonName"}),
                 new Example("Read convert parameter from Json file", new Options {JsonRequestFile = "./request.json"}),
-                new Example("Read convert parameter from Json file",
+                new Example("Read convert parameter from Json file and use symbols list from from instead",
                     new Options {JsonRequestFile = "./request.json", UniverseListFilePath = "./ISINList.txt"})
             };
         }
