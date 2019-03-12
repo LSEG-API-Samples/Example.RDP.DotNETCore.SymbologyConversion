@@ -1,4 +1,4 @@
-# Using Symbology Conversion Service with .NET Core
+# Using EDP Symbology Conversion Service with .NET Core
 
 ## Introduction
 
