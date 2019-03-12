@@ -368,7 +368,7 @@ Convert mulitple RICs to ISIN and CommonName:
   EDPSymbologyConvert --universe IBM.N,MSFT.O,VOD.L --to ISIN,CommonName
 Read convert parameter from Json file:
   EDPSymbologyConvert --jsonfile ./request.json
-Read convert parameter from Json file and use symbols list from item file instead:
+Read convert parameter from Json file and use symbols list from from instead:
   EDPSymbologyConvert --itemfile ./ISINList.txt --jsonfile ./request.json
 
   -i, --universe     Required. List of symbol or item separate by comma. For example, -i
