@@ -1,7 +1,8 @@
 {
   "profiles": {
     "EDPSymbologyConvertConsoleApp": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "-i IBM.N,JPY=,VOD.L"
     }
   }
 }

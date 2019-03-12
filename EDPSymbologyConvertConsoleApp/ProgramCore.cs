@@ -137,13 +137,14 @@ namespace EDPSymbologyConvertConsoleApp
 
             if (appConfig.Verbose)
             {
+                Console.WriteLine();
                 Console.WriteLine("============= Response Body in Json Format=================");
                 Console.WriteLine(symbologyData.ToJson());
                 Console.WriteLine("===========================================================");
+                Console.WriteLine();
             }
 
-            Console.WriteLine();
-            Console.WriteLine("=======================================");
+            Console.WriteLine("===========Universe List=================");
             foreach (var universe in symbologyData.Universe)
             {
                 Console.WriteLine($"Common Name:{universe.Common_Name}");
@@ -151,16 +152,21 @@ namespace EDPSymbologyConvertConsoleApp
                 Console.WriteLine($"Organization Perm ID:{universe.OrganizationPermID}");
                 Console.WriteLine($"Reporting Currency:{universe.ReportingCurrentcy}");
             }
+            Console.WriteLine("=========================================");
 
             Console.WriteLine();
             Console.WriteLine($"Row Count: {symbologyData.Links.Count}");
+            Console.WriteLine("===============Header==================");
             foreach (var header in symbologyData.Headers)
                 Console.Write($"| {header.Title}({header.Name}) ");
-            Console.WriteLine("\n");
+            Console.WriteLine("\n=======================================");
+
             foreach (var row in symbologyData.Data)
             {
-                foreach (var column in row) Console.Write(column != null ? $"|{column}" : "|Null ");
-                Console.WriteLine();
+                foreach (var column in row)
+                    Console.Write(column != null ? $"|{column}" : "|null ");
+
+                Console.WriteLine("\n");
             }
 
             if (symbologyData.Messages != null)
