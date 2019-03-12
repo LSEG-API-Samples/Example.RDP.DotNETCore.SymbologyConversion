@@ -82,7 +82,7 @@ namespace EDPSymbologyConvertConsoleApp
                             ? GetNewToken(appConfig.Username, appConfig.Password, authClient, cts.Token)
                             : RefreshToken(appConfig.Username, appConfig.RefreshToken, authClient, cts.Token);
                     }
-                    catch (EDPAuthorizeException<AuthError> exception) when (exception.StatusCode == 400)
+                    catch (EDPAuthorizeException<AuthError> exception) 
                     {
                         Console.WriteLine(
                             $"Login Failed! Status Code:{exception.StatusCode} " +
