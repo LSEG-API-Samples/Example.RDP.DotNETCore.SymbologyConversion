@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,16 +65,7 @@ namespace EDPSymbologyConvertConsoleApp
                 if (bCancelledLogin) break;
 
                 Console.WriteLine("Logging in to the EDP server, please wait");
-                var httpHandler = new HttpClientHandler()
-                {
-                    AllowAutoRedirect = true,
-                    UseProxy = appConfig.UseProxyServer,
-                    Proxy = appConfig.UseProxyServer ? new WebProxy(appConfig.ProxyServer,true)
-                    {
-                        Credentials = new NetworkCredential(appConfig.ProxyUsername,appConfig.ProxyPassword),
-                        UseDefaultCredentials = string.IsNullOrEmpty(appConfig.ProxyUsername) && string.IsNullOrEmpty(appConfig.ProxyPassword)
-                    }:null
-                };
+
                 using (var client = new HttpClient())
                 {
                     var authClient = new AuthorizeClient(client);
@@ -375,8 +365,6 @@ namespace EDPSymbologyConvertConsoleApp
             if (!string.IsNullOrEmpty(appConfig.RefreshToken)) Console.WriteLine($"RefreshToken(hidden):{appConfig.RefreshToken}");
             if (!string.IsNullOrEmpty(appConfig.SymbologyBaseURL)) Console.WriteLine($"Symbology Base URL(hidden):{appConfig.SymbologyBaseURL}");
             if (!string.IsNullOrEmpty(appConfig.AuthBaseURL)) Console.WriteLine($"Authorization Base URL(hidden):{appConfig.AuthBaseURL}");
-            if (!string.IsNullOrEmpty(appConfig.ProxyServer)) Console.WriteLine($"ProxyServer(hidden):{appConfig.ProxyServer}");
-            Console.WriteLine($"UseProxyServer(hidden):{appConfig.UseProxyServer}");
             Console.WriteLine("======================================================");
         }
 
