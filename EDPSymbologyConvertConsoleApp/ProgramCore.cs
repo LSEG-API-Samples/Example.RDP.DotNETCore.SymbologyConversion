@@ -93,7 +93,8 @@ namespace EDPSymbologyConvertConsoleApp
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine($"{exception.Message}");
+                        Console.WriteLine($"{exception.GetType().ToString()} {exception.Message}");
+                        bCancelledLogin = true;
                     }
 
                 }
