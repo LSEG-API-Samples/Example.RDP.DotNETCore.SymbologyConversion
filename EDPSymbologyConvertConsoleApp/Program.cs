@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -49,7 +50,17 @@ namespace EDPSymbologyConvertConsoleApp
             var IsCancelledReqeust = false;
             do
             {
-                using (var client = new HttpClient())
+                var httpHandler = new HttpClientHandler()
+                {
+                    AllowAutoRedirect = true,
+                    UseProxy = appConfig.UseProxyServer,
+                    Proxy = appConfig.UseProxyServer?new WebProxy(appConfig.ProxyServer,true)
+                    {
+                        Credentials = new NetworkCredential(appConfig.ProxyUsername, appConfig.ProxyPassword),
+                        UseDefaultCredentials = string.IsNullOrEmpty(appConfig.ProxyUsername) && string.IsNullOrEmpty(appConfig.ProxyPassword)
+                    }:null
+                };
+                using (var client = new HttpClient(httpHandler))
                 {
                     // Set access token in Http Authorization Header
                     var accessToken = string.IsNullOrEmpty(appConfig.AccessToken)

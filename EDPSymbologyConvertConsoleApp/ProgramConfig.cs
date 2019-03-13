@@ -78,6 +78,24 @@ namespace EDPSymbologyConvertConsoleApp
 
             public string SymbologyBaseURL { get; set; }
 
+            [Option("proxy", Default = "", Required = false, Hidden = true,
+                HelpText =
+                    "Specify proxy server.")]
+
+            public string ProxyServer { get; set; }
+
+            [Option("proxy_username", Default = "", Required = false, Hidden = true,
+                HelpText =
+                    "Specify username for proxy server.")]
+
+            public string ProxyUsername{ get; set; }
+
+            [Option("proxy_password", Default = "", Required = false, Hidden = true,
+                HelpText =
+                    "Specify password for proxy server.")]
+
+            public string ProxyPassword { get; set; }
+
             // Omitting long name, defaults to name of property, ie "--verbose"
             [Option(Default = false, HelpText = "Print additional logs to console output.")]
             public bool Verbose { get; set; }
@@ -115,6 +133,11 @@ namespace EDPSymbologyConvertConsoleApp
             public string RefreshToken { get; set; }
             public string AuthBaseURL { get; set; }
             public string SymbologyBaseURL { get; set; }
+            public string ProxyServer { get; set; }
+            public string ProxyUsername { get; set; }
+            public string ProxyPassword { get; set; }
+
+            public bool UseProxyServer => !string.IsNullOrEmpty(ProxyServer);
             public bool Verbose { get; set; }
         }
 
@@ -133,7 +156,10 @@ namespace EDPSymbologyConvertConsoleApp
                 AccessToken = options.AccessToken,
                 RefreshToken = options.RefreshToken,
                 AuthBaseURL=options.AuthBaseURL,
-                SymbologyBaseURL=options.SymbologyBaseURL
+                SymbologyBaseURL=options.SymbologyBaseURL,
+                ProxyServer = options.ProxyServer,
+                ProxyUsername = options.ProxyUsername,
+                ProxyPassword = options.ProxyPassword
             };
 
             return 1;
