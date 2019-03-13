@@ -355,38 +355,33 @@ It uses C# [Commandline Parser](https://github.com/commandlineparser/commandline
 $./EDPSymbologyConvert --help
 EDPSymbologyConvert 1.0.0
 Copyright (C) 2019 Refinitiv
-
-ERROR(S):
-  Required option 'i, universe' is missing.
-  Required option 'j, jsonfile' is missing.
 USAGE:
-Convert mulitple RICs:
+Convert multiple RICs:
   EDPSymbologyConvert --universe IBM.N,MSFT.O,VOD.L
-Convert mutiples types of symbols:
+Convert multiples types of symbols:
   EDPSymbologyConvert --universe IBM.N,037833100,TH0001010014
-Convert mulitple RICs to ISIN and CommonName:
-  EDPSymbologyConvert --universe IBM.N,MSFT.O,VOD.L --to ISIN,CommonName
+Convert multiple RICs to ISIN and CommonName:
+  EDPSymbologyConvert --to ISIN,CommonName --universe IBM.N,MSFT.O,VOD.L
 Read convert parameter from Json file:
   EDPSymbologyConvert --jsonfile ./request.json
-Read convert parameter from Json file and use symbols list from from instead:
+Read convert parameter from Json file and use symbols list from file named ISINList.txt instead:
   EDPSymbologyConvert --itemfile ./ISINList.txt --jsonfile ./request.json
 
-  -i, --universe     Required. List of symbol or item separate by comma. For example, -i
+  --universe         Required. Symbol or item list in comma separate format.For example, --universe
                      IBM.N,037833100,TH0001010014 ,where 037833100 is CUSIP and TH0001010014 is
                      ISIN.
 
-  -t, --to           List of field to returns from Symbology Convert service. Set it to empty
-                     string or not set, the service will return all available fields for the
-                     universe.
+  --to               List of field from Symbology Convert service. Set it to empty string or not
+                     set, the service will return all available fields for the universe.
 
-  -j, --jsonfile     Required. Allow the application to read use request parameter from json file
-                     instead. If set it override values from -i and -t.
+  --jsonfile         Required. Allow the application to read a request parameter from json file
+                     instead. If specify this option, it override values from --universe and --to.
 
-  -o, --csvoutput    (Default: ./csvoutput.csv) File name or absolute path to csv file. It allows
-                     the application to write an output to CSV file specify in this option.
+  -o, --csvoutput    (Default: ./csvoutput.csv) File name or absolute path to csv file. Specify
+                     this option to set file path that application write .CSV file.
 
-  -f, --itemfile     (Default: ) If set, application will read universe list from the file instead.
-                     The format is multi-line item.
+  --itemfile         (Default: ) If specify this option, application read universe list from the
+                     file instead. The format is multi-line symbol list.
 
   --verbose          (Default: false) Print additional logs to console output.
 

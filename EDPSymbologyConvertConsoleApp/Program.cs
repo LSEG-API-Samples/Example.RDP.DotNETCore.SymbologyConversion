@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using Refinitiv.EDP.Example.AuthOauth2;
 using Refinitiv.EDP.Example.Symbology.Convert;
 
@@ -44,6 +46,7 @@ namespace EDPSymbologyConvertConsoleApp
             //    SymbologyConvertPost using Http Post to send the request. 
             var requestIsSuccess = false;
             Symbology symbologyData = null;
+            var IsCancelledReqeust = false;
             do
             {
                 using (var client = new HttpClient())
@@ -62,17 +65,23 @@ namespace EDPSymbologyConvertConsoleApp
 
                     var symbologyClient = new EDPSymbologyClient(client);
 
-                    //If user specify symbology based url vi app config, it overrides default symbology based url.
+                    //If user specify EDP Symbology based url vi app config, it overrides default symbology based url.
                     if (!string.IsNullOrEmpty(appConfig.SymbologyBaseURL))
                         symbologyClient.BaseUrl = appConfig.SymbologyBaseURL;
 
                     Console.WriteLine("Retrieving data from EDP Symbology Conversion service...");
-
+                    var cts = new CancellationTokenSource();
+                    Console.TreatControlCAsInput = false;
+                    Console.CancelKeyPress += (s, ev) =>
+                    {
+                        IsCancelledReqeust = true;
+                        cts.Cancel();
+                    };
                     try
                     {
                         symbologyData = !appConfig.UseJsonRequestFile
-                            ? SymbologyConvertGet(symbologyClient, convertRequest, appConfig)
-                            : SymbologyConvertPost(symbologyClient, convertRequest, appConfig);
+                            ? SymbologyConvertGet(symbologyClient, convertRequest, appConfig, cts)
+                            : SymbologyConvertPost(symbologyClient, convertRequest, appConfig, cts);
                     }
                     catch (EDPSymbologyException<Error> exception)
                     {
@@ -95,12 +104,21 @@ namespace EDPSymbologyConvertConsoleApp
                             authToken = DoLoginAndAuthenticate(appConfig);
                         }
                     }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine($"{exception.Message}");
+                    }
 
                     requestIsSuccess = symbologyData != null;
                 }
-            } while (!requestIsSuccess);
+            } while (!IsCancelledReqeust && !requestIsSuccess);
 
-            PrintSymbologyResponse(symbologyData, appConfig);
+            if (!IsCancelledReqeust)
+                PrintSymbologyResponse(symbologyData, appConfig);
+            else
+            {
+                Console.WriteLine("Operation was cancelled. Exit the application");
+            }
         }
 
         public static Tokenresponse DoLoginAndAuthenticate(Config appConfig)

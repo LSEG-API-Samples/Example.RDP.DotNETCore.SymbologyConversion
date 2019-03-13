@@ -10,35 +10,35 @@ namespace EDPSymbologyConvertConsoleApp
     {
         private class Options
         {
-            [Option('i', "universe", SetName = "set1", Required = true, HelpText =
-                "List of symbol or item separate by comma. " +
-                "For example, -i IBM.N,037833100,TH0001010014 ," +
+            [Option("universe", SetName = "set1", Required = true, HelpText =
+                "Symbol or item list in comma separate format." +
+                "For example, --universe IBM.N,037833100,TH0001010014 ," +
                 "where 037833100 is CUSIP and TH0001010014 is ISIN. ")]
             public string Universe { get; set; }
 
 
-            [Option('t', "to", SetName = "set1", Required = false,
+            [Option("to", SetName = "set1", Required = false,
                 HelpText =
-                    "List of field to returns from Symbology Convert service. Set it to empty string or not set, " +
+                    "List of field from Symbology Convert service. Set it to empty string or not set, " +
                     "the service will return all available fields for the universe.")]
             public string ToEnum { get; set; }
 
-            [Option('j', "jsonfile", SetName = "set2", Required = true,
+            [Option("jsonfile", SetName = "set2", Required = true,
                 HelpText =
-                    "Allow the application to read use request parameter from json file instead. " +
-                    "If set it override values from -i and -t.")]
+                    "Allow the application to read a request parameter from json file instead. " +
+                    "If specify this option, it override values from --universe and --to.")]
             public string JsonRequestFile { get; set; }
 
             [Option('o', "csvoutput", Default = "./csvoutput.csv", Required = false,
                 HelpText =
                     "File name or absolute path to csv file. " +
-                    "It allows the application to write an output to CSV file specify in this option.")]
+                    "Specify this option to set file path that application write .CSV file.")]
 
             public string CsvFilePath { get; set; }
 
-            [Option('f', "itemfile", Default = "", Required = false,
+            [Option("itemfile", Default = "", Required = false,
                 HelpText =
-                    "If set, application will read universe list from the file instead. The format is multi-line item.")]
+                    "If specify this option, application read universe list from the file instead. The format is multi-line symbol list.")]
 
             public string UniverseListFilePath { get; set; }
 
@@ -55,25 +55,25 @@ namespace EDPSymbologyConvertConsoleApp
             public string Password { get; set; }
 
             [Option("refreshtoken", Default = "", Required = false, Hidden = true,
-                HelpText = "If set, application will get a new access token using the refresh token instead.")]
+                HelpText = "If specify this option, application will get a new access token using the refresh token instead.")]
 
             public string RefreshToken { get; set; }
 
             [Option("accesstoken", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "If set, application will pass the access token to the Http request but if the token is expired, user need to input a username and password")]
+                    "If specify this option, application will pass the access token to the Http request but if the token is expired, user has to input a username and password")]
 
             public string AccessToken { get; set; }
 
             [Option("authbaseurl", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "Authorization Based Url.")]
+                    "Speicify this option to override default Authentication based Url.")]
 
             public string AuthBaseURL { get; set; }
 
             [Option("symbologybaseurl", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "Symbolgoy Based URL.")]
+                    "Speicify this option to override default Symbology based Url.")]
 
             public string SymbologyBaseURL { get; set; }
 
@@ -85,13 +85,13 @@ namespace EDPSymbologyConvertConsoleApp
 
             public static IEnumerable<Example> Examples => new List<Example>
             {
-                new Example("Convert mulitple RICs", new Options {Universe = "IBM.N,MSFT.O,VOD.L"}),
-                new Example("Convert mutiples types of symbols",
+                new Example("Convert multiple RICs", new Options {Universe = "IBM.N,MSFT.O,VOD.L"}),
+                new Example("Convert multiples types of symbols",
                     new Options {Universe = "IBM.N,037833100,TH0001010014"}),
-                new Example("Convert mulitple RICs to ISIN and CommonName",
+                new Example("Convert multiple RICs to ISIN and CommonName",
                     new Options {Universe = "IBM.N,MSFT.O,VOD.L", ToEnum = "ISIN,CommonName"}),
                 new Example("Read convert parameter from Json file", new Options {JsonRequestFile = "./request.json"}),
-                new Example("Read convert parameter from Json file and use symbols list from from instead",
+                new Example("Read convert parameter from Json file and use symbols list from file named ISINList.txt instead",
                     new Options {JsonRequestFile = "./request.json", UniverseListFilePath = "./ISINList.txt"})
             };
         }

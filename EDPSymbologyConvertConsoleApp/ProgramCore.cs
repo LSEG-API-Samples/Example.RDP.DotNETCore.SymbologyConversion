@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using CsvHelper;
 using Newtonsoft.Json.Linq;
 using Refinitiv.EDP.Example.AuthOauth2;
@@ -13,18 +14,16 @@ namespace EDPSymbologyConvertConsoleApp
 {
     internal partial class Program
     {
-        private const string ParamName = "symbologyClient.PostConvertAsync(convertRequest,null).GetAwaiter().GetResult()";
+        private const string ParamName =
+            "symbologyClient.PostConvertAsync(convertRequest,null).GetAwaiter().GetResult()";
 
-        public static Tokenresponse RefreshToken(string username, string refreshToken, AuthorizeClient client,
-            CancellationToken cts)
-        {
-            Tokenresponse tokenResponse = null;
-            tokenResponse = client.TokenAsync("refresh_token", username, "", "", "", refreshToken,
-                username, "",
-                "", "", "", cts).GetAwaiter().GetResult().Result;
-            return tokenResponse;
-        }
-
+        /// <summary> There is a loop inside the function to ask user to enter EDP username and password until it get a valid token.
+        /// User can press Ctrl+c to exit from the loop and exit the application</summary>
+        /// <return>True if login success and False if user cancelled the login</return> 
+        /// <param name="appConfig"> Required appConfig to read config parameters. </param>
+        /// <param name="authToken"> Application has to pass Tokenresponse object to the function and
+        /// the function will return Tokenresponse to application. It could be null if user cancelled the login </param>
+       
         public static bool DoLoginAndGetToken(out Tokenresponse authToken, Config appConfig)
         {
             authToken = null;
@@ -36,7 +35,6 @@ namespace EDPSymbologyConvertConsoleApp
                 bCancelledLogin = true;
                 ev.Cancel = bCancelledLogin;
                 cts.Cancel();
-                Console.WriteLine("\nLogin Cancelled!\n");
             };
 
             do
@@ -93,7 +91,11 @@ namespace EDPSymbologyConvertConsoleApp
                         appConfig.RefreshToken = string.Empty;
                         Console.WriteLine("Re-Enter EDP Username and Password");
                     }
-                    
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine($"{exception.Message}");
+                    }
+
                 }
 
                 if (bCancelledLogin) break;
@@ -102,35 +104,49 @@ namespace EDPSymbologyConvertConsoleApp
 
             return !bCancelledLogin && authToken != null;
         }
-
+        /// <summary> Call PostConvertAsync which internally use Http Post to get data form Symbology Conversion service</summary>
+        /// <param name="symbologyData">EDPSymbologyClient object</param>
+        /// <param name="appConfig"> appConfig object to verify option tot print Json request message </param>
+        /// <param name="convertRequest"> ConvertRequest object contains request values</param>
+        /// <param name="cts"> CancellationTokenSource object </param>
         public static Symbology SymbologyConvertPost(EDPSymbologyClient symbologyClient,
             ConvertRequest convertRequest,
-            Config appConfig)
+            Config appConfig,
+            CancellationTokenSource cts)
         {
             if (appConfig.Verbose)
                 PrintConvertRequest(convertRequest);
 
             var symbologyResponse =
-                symbologyClient.PostConvertAsync(convertRequest,Format.NoMessages).GetAwaiter().GetResult() ??
+                symbologyClient.PostConvertAsync(convertRequest,Format.NoMessages,cts.Token).GetAwaiter().GetResult() ??
                 throw new ArgumentNullException(
                     ParamName);
             return symbologyResponse;
         }
-
+        /// <summary> Call GetConvertAsync which internally use Http Get to get data form Symbology Conversion service</summary>
+        /// <param name="symbologyData">EDPSymbologyClient object</param>
+        /// <param name="appConfig"> appConfig object to verify option tot print Json request message </param>
+        /// <param name="convertRequest"> ConvertRequest object contains request values</param>
+        /// <param name="cts"> CancellationTokenSource object </param>
         public static Symbology SymbologyConvertGet(EDPSymbologyClient symbologyClient,
             ConvertRequest convertRequest,
-            Config appConfig)
+            Config appConfig,
+            CancellationTokenSource cts)
         {
             if (appConfig.Verbose)
                 PrintConvertRequest(convertRequest);
 
             var symbolResult = symbologyClient.GetConvertAsync(string.Join(',', convertRequest.Universe),
-                    convertRequest.To,Format.NoMessages)
+                    convertRequest.To,Format.NoMessages,cts.Token)
                 .GetAwaiter().GetResult();
 
             return symbolResult;
         }
-
+        /// <summary> Print contents inside the Symbology object returned from Symbology Conversion service.
+        /// Also export the data and headers from Symbology object to .CSV file.</summary>
+        /// <param name="symbologyData">Symbolgoy object</param>
+        /// <param name="appConfig"> Application config object to verify options for print output and export csv file</param>
+       
         public static void PrintSymbologyResponse(Symbology symbologyData, Config appConfig)
         {
             if (symbologyData is null) return;
@@ -219,7 +235,31 @@ namespace EDPSymbologyConvertConsoleApp
                 Console.WriteLine($"{exception.GetType()} : {exception.Message}");
             }
         }
-
+        /// <summary>
+        /// Use this function to Refresh the Access Token
+        /// </summary>
+        /// <param name="username"> EDP username</param>
+        /// <param name="refreshToken">The refresh token</param>
+        /// <param name="client">AuthorizeClient object to call TokenAsync</param>
+        /// <param name="cts">CancellationToken</param>
+        /// <returns></returns>
+        public static Tokenresponse RefreshToken(string username, string refreshToken, AuthorizeClient client,
+            CancellationToken cts)
+        {
+            Tokenresponse tokenResponse = null;
+            tokenResponse = client.TokenAsync("refresh_token", username, "", "", "", refreshToken,
+                username, "",
+                "", "", "", cts).GetAwaiter().GetResult().Result;
+            return tokenResponse;
+        }
+        /// <summary>
+        /// Use this function to get a New AccessToken+Refresh token
+        /// </summary>
+        /// <param name="username">EDP Username</param>
+        /// <param name="password">EDP Password</param>
+        /// <param name="client">Authorization Client object</param>
+        /// <param name="cancellationToken">CancellationToken object</param>
+        /// <returns></returns>
         public static Tokenresponse GetNewToken(string username, string password, AuthorizeClient client,
             CancellationToken cancellationToken)
         {
@@ -229,7 +269,12 @@ namespace EDPSymbologyConvertConsoleApp
                 .GetAwaiter().GetResult();
             return tokenResult.Result;
         }
-
+        /// <summary>
+        /// This function read request parameter form appConfig and convert comma separate value to list and set ti back to ConvertRequest object.
+        /// It also verify enum value from To parameter if it contains invalid value it automatically remove the value from field list before set it ConvertRequest object.
+        /// </summary>
+        /// <param name="appConfig"></param>
+        /// <returns>ConvertRequest</returns>
         private static ConvertRequest ValidateAndCreateConvertRequest(Config appConfig)
         {
             var convertRequest = new ConvertRequest();
