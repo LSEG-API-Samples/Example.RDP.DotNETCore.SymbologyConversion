@@ -11,7 +11,7 @@ namespace EDPSymbologyConvertConsoleApp
         private class Options
         {
             [Option("universe", SetName = "set1", Required = true, HelpText =
-                "Symbol or item list in comma separate format." +
+                "Symbol or item list in comma separated format. " +
                 "For example, --universe IBM.N,037833100,TH0001010014 ," +
                 "where 037833100 is CUSIP and TH0001010014 is ISIN. ")]
             public string Universe { get; set; }
@@ -19,61 +19,62 @@ namespace EDPSymbologyConvertConsoleApp
 
             [Option("to", SetName = "set1", Required = false,
                 HelpText =
-                    "List of field from Symbology Convert service. Set it to empty string or not set, " +
-                    "the service will return all available fields for the universe.")]
+                    "List of the field from Symbology Convert service. " +
+                    "Set it to an empty string or not set, the service will return all available fields for the universe.")]
             public string ToEnum { get; set; }
 
             [Option("jsonfile", SetName = "set2", Required = true,
                 HelpText =
-                    "Allow the application to read a request parameter from json file instead. " +
-                    "If specify this option, it override values from --universe and --to.")]
+                    "Allow the application to read a request parameter from the JSON file instead. " +
+                    "If specify this option, it overrides values from --universe and --to.")]
             public string JsonRequestFile { get; set; }
 
             [Option('o', "csvoutput", Default = "./csvoutput.csv", Required = false,
                 HelpText =
-                    "File name or absolute path to csv file. " +
-                    "Specify this option to set file path that application write .CSV file.")]
+                    "File name or absolute path to CSV file. " +
+                    "Specify this option to set the file path that application writes.CSV file.")]
 
             public string CsvFilePath { get; set; }
 
             [Option("itemfile", Default = "", Required = false,
-                HelpText =
-                    "If specify this option, application read universe list from the file instead. The format is multi-line symbol list.")]
+                HelpText ="If specifying this option, application read universe list from the file instead." +
+                          "The format is a multi - line symbol list.")]
 
             public string UniverseListFilePath { get; set; }
 
             [Option('u', "username", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "EDP Username, if set, application will use the username specify by this parameter instead.")]
+                    "EDP Username, if set, the application will use the username specify by this parameter instead.")]
 
             public string Username { get; set; }
 
             [Option('p', "password", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "EDP Password, if set, application will use the password specify by this parameter instead.")]
+                    "EDP Password, if set, the application will use the password specify by this parameter instead.")]
 
             public string Password { get; set; }
 
             [Option("refreshtoken", Default = "", Required = false, Hidden = true,
-                HelpText = "If specify this option, application will get a new access token using the refresh token instead.")]
+                HelpText = "If specify this option, the application will get a new access token using the refresh token instead.")]
 
             public string RefreshToken { get; set; }
 
             [Option("accesstoken", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "If specify this option, application will pass the access token to the Http request but if the token is expired, user has to input a username and password")]
+                    "If specify this option, the application will pass the access token to the Http request but if the token is expired, " +
+                    "a user has to input a username and password")]
 
             public string AccessToken { get; set; }
 
             [Option("authbaseurl", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "Speicify this option to override default Authentication based Url.")]
+                    "Specify this option to override the default Authentication based Url.")]
 
             public string AuthBaseURL { get; set; }
 
             [Option("symbologybaseurl", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "Speicify this option to override default Symbology based Url.")]
+                    "Specify this option to override the default Symbology service based Url.")]
 
             public string SymbologyBaseURL { get; set; }
 
@@ -90,8 +91,8 @@ namespace EDPSymbologyConvertConsoleApp
                     new Options {Universe = "IBM.N,037833100,TH0001010014"}),
                 new Example("Convert multiple RICs to ISIN and CommonName",
                     new Options {Universe = "IBM.N,MSFT.O,VOD.L", ToEnum = "ISIN,CommonName"}),
-                new Example("Read convert parameter from Json file", new Options {JsonRequestFile = "./request.json"}),
-                new Example("Read convert parameter from Json file and use symbols list from file named ISINList.txt instead",
+                new Example("Read convert parameter from JSON file", new Options {JsonRequestFile = "./request.json"}),
+                new Example("Read convert parameter from JSON file and use symbols list from the file named ISINList.txt instead",
                     new Options {JsonRequestFile = "./request.json", UniverseListFilePath = "./ISINList.txt"})
             };
         }
