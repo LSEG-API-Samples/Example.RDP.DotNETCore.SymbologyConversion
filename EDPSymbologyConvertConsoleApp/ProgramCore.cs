@@ -32,20 +32,26 @@ namespace EDPSymbologyConvertConsoleApp
             var cts = new CancellationTokenSource();
             Console.TreatControlCAsInput = false;
             Console.CancelKeyPress += (s, ev) =>
-            {
-                bCancelledLogin = true;
-                ev.Cancel = bCancelledLogin;
-                cts.Cancel();
-            };
+                {
+                    bCancelledLogin = true;
+                    ev.Cancel = true;
+                    cts.Cancel();
 
+                };
             do
             {
+               
+
                 Console.WriteLine("\nSignin to EDP(Elektron Data Platform) Press Ctrl+C to cancel");
                 Console.WriteLine("=============================");
 
 
+                if (bCancelledLogin) break;
+
                 if (string.IsNullOrEmpty(appConfig.Username))
                 {
+                   
+
                     Console.Write("Enter Username:");
                     appConfig.Username = Console.ReadLine();
                 }
@@ -54,65 +60,61 @@ namespace EDPSymbologyConvertConsoleApp
                     Console.WriteLine($"Username:{appConfig.Username}");
                 }
 
-                if (bCancelledLogin) break;
-
-                if (string.IsNullOrEmpty(appConfig.RefreshToken) && string.IsNullOrEmpty(appConfig.Password))
+                if (!bCancelledLogin && string.IsNullOrEmpty(appConfig.RefreshToken) && string.IsNullOrEmpty(appConfig.Password))
                 {
                     Console.Write("Enter Password:");
                     appConfig.Password = ReadPassword();
                 }
 
                 Console.WriteLine("=============================");
+
                 if (bCancelledLogin) break;
 
                 Console.WriteLine("Logging in to the EDP server, please wait");
-                var httpHandler = new HttpClientHandler()
-                {
-                    AllowAutoRedirect = true,
-                    UseProxy = appConfig.UseProxyServer,
-                    Proxy = appConfig.UseProxyServer ? new WebProxy(appConfig.ProxyServer,true)
-                    {
-                        Credentials = new NetworkCredential(appConfig.ProxyUsername,appConfig.ProxyPassword),
-                        UseDefaultCredentials = string.IsNullOrEmpty(appConfig.ProxyUsername) && string.IsNullOrEmpty(appConfig.ProxyPassword)
-                    }:null
-                };
-                using (var client = new HttpClient())
+
+                using (var client = new HttpClient(GenerateHttpClientHandler(appConfig)))
                 {
                     var authClient = new AuthorizeClient(client);
 
                     //If user specify authorize token url vi app config, it overrides default authorize url.
-                    if(!string.IsNullOrEmpty(appConfig.AuthBaseURL))
-                       authClient.BaseUrl = appConfig.AuthBaseURL;
+                    if (!string.IsNullOrEmpty(appConfig.AuthBaseURL))
+                        authClient.BaseUrl = appConfig.AuthBaseURL;
 
                     try
                     {
                         authToken = string.IsNullOrEmpty(appConfig.RefreshToken)
-                            ? GetNewToken(appConfig.Username, appConfig.Password, authClient, cts.Token)
-                            : RefreshToken(appConfig.Username, appConfig.RefreshToken, authClient, cts.Token);
+                                        ? GetNewToken(appConfig.Username, appConfig.Password, authClient, cts.Token)
+                                        : RefreshToken(
+                                            appConfig.Username,
+                                            appConfig.RefreshToken,
+                                            authClient,
+                                            cts.Token);
                     }
-                    catch (EDPAuthorizeException<AuthError> exception) 
+                    catch (EDPAuthorizeException<AuthError> exception)
                     {
                         Console.WriteLine(
-                            $"Login Failed! Status Code:{exception.StatusCode} " +
-                            $"Error:{exception.Result.Error1} {exception.Result.Error_description}");
+                            $"Login Failed! Status Code:{exception.StatusCode} "
+                            + $"Error:{exception.Result.Error1} {exception.Result.Error_description} {exception.Result.Error_uri}");
 
-                        appConfig.Username = string.Empty;
-                        appConfig.Password = string.Empty;
-                        appConfig.RefreshToken = string.Empty;
-                        Console.WriteLine("Re-Enter EDP Username and Password");
+
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine($"{exception.Message}");
+                        Console.WriteLine($"\nGet {exception.GetType().Name} Error {exception.Message}");
+                    }
+                    finally
+                    {
+                        //reset everything to empty and ask user to enter credential again.
+                        appConfig.Username = string.Empty;
+                        appConfig.Password = string.Empty;
+                        appConfig.RefreshToken = string.Empty;
+                        //Console.WriteLine("\nRe-enter EDP username and password or press Ctrl+C to exit");
                     }
 
                 }
+            } while (!bCancelledLogin && (authToken == null));
 
-                if (bCancelledLogin) break;
-                Console.WriteLine();
-            } while (authToken == null);
-
-            return !bCancelledLogin && authToken != null;
+            return !bCancelledLogin && (authToken != null);
         }
         /// <summary> Call PostConvertAsync which internally use Http Post to get data form Symbology Conversion service</summary>
         /// <param name="symbologyData">EDPSymbologyClient object</param>
@@ -419,7 +421,33 @@ namespace EDPSymbologyConvertConsoleApp
 
             return true;
         }
+        /// <summary>
+        /// Generate Http Handler based on Config parameters
+        /// </summary>
+        /// <param name="appConfig"></param>
+        /// <returns>HttpClientHandler</returns>
+        private static HttpClientHandler GenerateHttpClientHandler(Config appConfig)
+        {
+            var httpHandler = new HttpClientHandler();
+            httpHandler.UseProxy = appConfig.UseProxyServer;
+            if (appConfig.UseProxyServer)
+            {
+                httpHandler.Proxy = new WebProxy(appConfig.ProxyServer, false);
 
+                if (!string.IsNullOrEmpty(appConfig.ProxyUsername) && !string.IsNullOrEmpty(appConfig.ProxyPassword))
+                {
+                    httpHandler.Credentials = new NetworkCredential(
+                        appConfig.ProxyUsername,
+                        appConfig.ProxyPassword);
+                }
+
+                httpHandler.UseDefaultCredentials = string.IsNullOrEmpty(appConfig.ProxyUsername)
+                                                    && string.IsNullOrEmpty(appConfig.ProxyPassword);
+
+            }
+
+            return httpHandler;
+        }
         private static void DumpToken(Tokenresponse token)
         {
             if (token == null)
