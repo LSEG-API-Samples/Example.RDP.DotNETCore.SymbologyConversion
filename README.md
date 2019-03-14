@@ -12,7 +12,7 @@ There are two parts in this article the first part is detailed about the Symbolo
 
 Required software components:
 
-* [.NET Core Framework](https://www.microsoft.com/net/download/dotnet-core/2.1)-.NET Framework version 2.1 or later version
+* [.NET Core Framework](https://www.microsoft.com/net/download/dotnet-core/2.2)- version 2.2 or later version
 * [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)- We use Visual Studio 2017 to develop the application on Windows.
 
 Optional software components:
