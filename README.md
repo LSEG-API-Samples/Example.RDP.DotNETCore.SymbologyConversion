@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Symbology Conversion service is one of the REST API provided under the [Elektron Data Platform (EDP)](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For instance, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
+Symbology Conversion service is one of the REST API provided under the [Elektron Data Platform (EDP)](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
 
 There are two parts in this article the first part is detailed about the Symbology Conversion method including details about the request and response message for the Conversion service. The second part is the details about .NET Core Console example application we create to demonstrate the Symbology API usage.
 
@@ -189,7 +189,7 @@ The following JSON data is a sample of the response message from the Convert met
 
 The response of the convert method containing a JSON object named **data** and **headers**. Actually, the data object is a collection or list of the array of nullable dynamic type. The array is actual data for each input instrument or symbol in the request message. And the header is a collection of header object describing the meaning of element inside the array.
 
-For instance, from the sample response message, the data[1] represents actual data for instrument "TRI.N" and the value of data[1][2] is a string "CA8849037095" which represents an ISIN according to the value of headers[2].title.
+For example, from the sample response message, the data[1] represents actual data for instrument "TRI.N" and the value of data[1][2] is a string "CA8849037095" which represents an ISIN according to the value of headers[2].title.
 
 The order of array inside the data associated with the order of an element in headers object. Hence, the application has to iterate through the data collection to get a value of each symbol identifier. And then get the data definition for each element in the array by parsing the headers object to get the header description and its title.
 
