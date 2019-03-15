@@ -78,9 +78,9 @@ namespace EDPSymbologyConvertConsoleApp
 
             public string SymbologyBaseURL { get; set; }
 
-            [Option("proxy", Default = "", Required = false, Hidden = true,
+            [Option("proxy", Default = "", Required = false, Hidden = false,
                 HelpText =
-                    "Specify proxy server.")]
+                    "Specify your proxy server.")]
 
             public string ProxyServer { get; set; }
 
@@ -104,14 +104,16 @@ namespace EDPSymbologyConvertConsoleApp
 
             public static IEnumerable<Example> Examples => new List<Example>
             {
-                new Example("Convert multiple RICs", new Options {Universe = "IBM.N,MSFT.O,VOD.L"}),
-                new Example("Convert multiples types of symbols",
+                new Example($"Convert multiple RICs", new Options {Universe = "IBM.N,MSFT.O,VOD.L"}),
+                new Example($"Convert multiples types of symbols",
                     new Options {Universe = "IBM.N,037833100,TH0001010014"}),
-                new Example("Convert multiple RICs to ISIN and CommonName",
+                new Example($"Convert multiple RICs to ISIN and CommonName",
                     new Options {Universe = "IBM.N,MSFT.O,VOD.L", ToEnum = "ISIN,CommonName"}),
-                new Example("Read convert parameter from JSON file", new Options {JsonRequestFile = "./request.json"}),
-                new Example("Read convert parameter from JSON file and use symbols list from the file named ISINList.txt instead",
-                    new Options {JsonRequestFile = "./request.json", UniverseListFilePath = "./ISINList.txt"})
+                new Example($"Read convert parameter from JSON file", new Options {JsonRequestFile = "./request.json"}),
+                new Example($"Read convert parameter from JSON file and use symbols list from the file named ISINList.txt instead",
+                    new Options {JsonRequestFile = "./request.json", UniverseListFilePath = "./ISINList.txt"}),
+                new Example($"Connecting through Proxy Server where \"10.42.52.32:80\" is proxy server IP address",
+                new Options {Universe = "IBM.N", ProxyServer = "10.42.52.32:80"})
             };
         }
 

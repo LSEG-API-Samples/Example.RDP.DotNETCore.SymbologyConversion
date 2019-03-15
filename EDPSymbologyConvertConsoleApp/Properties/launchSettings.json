@@ -2,7 +2,7 @@
   "profiles": {
     "EDPSymbologyConvertConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "--universe IBM.N"
+      "commandLineArgs": "--help"
     }
   }
 }
