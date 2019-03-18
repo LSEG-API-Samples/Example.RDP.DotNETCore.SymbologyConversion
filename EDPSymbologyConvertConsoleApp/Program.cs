@@ -27,7 +27,7 @@ namespace EDPSymbologyConvertConsoleApp
             Console.WriteLine("Start EDP(Elektron Data Platform) Symbology Convert Example application");
             var convertRequest = ValidateAndCreateConvertRequest(appConfig);
 
-            if (appConfig.Verbose) DumpAppConfig(appConfig, convertRequest);
+            DumpAppConfig(appConfig, convertRequest);
 
             if (convertRequest.Universe.Count == 0)
             {

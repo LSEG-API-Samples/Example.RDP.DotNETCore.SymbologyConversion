@@ -52,12 +52,12 @@ namespace EDPSymbologyConvertConsoleApp
                 {
                    
 
-                    Console.Write("Enter Username:");
+                    Console.Write("Enter Username or Client ID:");
                     appConfig.Username = Console.ReadLine();
                 }
                 else
                 {
-                    Console.WriteLine($"Username:{appConfig.Username}");
+                    Console.WriteLine($"Username or Client ID:{appConfig.Username}");
                 }
 
                 if (!bCancelledLogin && string.IsNullOrEmpty(appConfig.RefreshToken) && string.IsNullOrEmpty(appConfig.Password))
@@ -365,14 +365,20 @@ namespace EDPSymbologyConvertConsoleApp
 
         private static void DumpAppConfig(Config appConfig, ConvertRequest convertRequest)
         {
+            if (convertRequest == null || appConfig==null)
+            {
+                Console.WriteLine("Unable to print configuration because Config or ConvertRequest object is null");
+                return;
+            }
+
             Console.WriteLine("========= Application Configuration List =============");
             Console.WriteLine("Universe:{0}",
                 convertRequest.Universe != null ? string.Join(",", convertRequest.Universe) : "");
             Console.WriteLine("ToEnum:{0}",
-                convertRequest.To != null ? string.Join(",", convertRequest.To) : "Not set, returns all fields");
+                (convertRequest.To != null)&&(convertRequest.To.Count>0) ? string.Join(",", convertRequest.To) : "No valid field list pass to application, returns all fields instead");
             Console.WriteLine($"Use Json File:{appConfig.JsonRequestFile} {appConfig.UseJsonRequestFile}");
             Console.WriteLine($"Export to CSV File:{appConfig.CsvFilePath} {appConfig.ExportToCSV} ");
-            if(!string.IsNullOrEmpty(appConfig.AccessToken))Console.WriteLine($"Username(hidden):{appConfig.Username}");
+            if(!string.IsNullOrEmpty(appConfig.AccessToken))Console.WriteLine($"Username or Client ID (hidden):{appConfig.Username}");
             if (!string.IsNullOrEmpty(appConfig.AccessToken)) Console.WriteLine($"AccessToken(hidden):{appConfig.AccessToken}");
             if (!string.IsNullOrEmpty(appConfig.RefreshToken)) Console.WriteLine($"RefreshToken(hidden):{appConfig.RefreshToken}");
             if (!string.IsNullOrEmpty(appConfig.SymbologyBaseURL)) Console.WriteLine($"Symbology Base URL(hidden):{appConfig.SymbologyBaseURL}");

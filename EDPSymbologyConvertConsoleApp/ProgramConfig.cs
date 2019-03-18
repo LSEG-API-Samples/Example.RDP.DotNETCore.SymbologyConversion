@@ -44,13 +44,13 @@ namespace EDPSymbologyConvertConsoleApp
 
             [Option('u', "username", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "EDP Username, if set, the application will use the username specify by this parameter instead.")]
+                    "EDP Username or Client ID, if set, the application will use the username or client id specified by this parameter instead.")]
 
             public string Username { get; set; }
 
             [Option('p', "password", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "EDP Password, if set, the application will use the password specify by this parameter instead.")]
+                    "EDP Password, if set, the application will use the password specified by this parameter instead.")]
 
             public string Password { get; set; }
 
