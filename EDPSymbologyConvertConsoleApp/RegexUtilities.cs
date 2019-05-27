@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
-
+// Util Class to verify if string is a valid email address provided by MSDN https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
 public class RegexUtilities
 {
     public static bool IsValidEmail(string email)
