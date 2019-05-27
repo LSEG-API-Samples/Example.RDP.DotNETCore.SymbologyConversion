@@ -9,8 +9,9 @@ namespace EDPOAuth2AuthorizeConsoleApp
     class Program
     {
         // Set the EDP Username and Password before building the application
-        const string edpUsername = "<Your EDP Username>";
-        const string edpPassword = "<Your EDP Password>";
+        const string edpUsername = "<EDP Username(Email)>";
+        private const string clientid = "<Client ID/App ID>";
+        const string edpPassword = "<EDP Password>";
 
         static void Main(string[] args)
         {
@@ -40,7 +41,7 @@ namespace EDPOAuth2AuthorizeConsoleApp
                 try
                 {
                     var tokenResult = client
-                        .TokenAsync("password", username, password, "", "trapi", "", username, "", "true", "",
+                        .TokenAsync("password", username, password, "", "trapi", "", clientid, "", "true", "",
                             "")
                         .GetAwaiter().GetResult();
                     return tokenResult.Result;

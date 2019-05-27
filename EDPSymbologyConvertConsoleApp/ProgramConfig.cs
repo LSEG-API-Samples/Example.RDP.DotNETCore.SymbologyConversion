@@ -44,9 +44,15 @@ namespace EDPSymbologyConvertConsoleApp
 
             [Option('u', "username", Default = "", Required = false, Hidden = true,
                 HelpText =
-                    "EDP Username or Client ID, if set, the application will use the username or client id specified by this parameter instead.")]
+                    "EDP Username(Email Address) or Machine ID, if the application uses the username, it must pass client id using with the login using --clientid ")]
 
             public string Username { get; set; }
+
+            [Option("clientid", Default = "", Required = false, Hidden = true,
+                HelpText =
+                    "EDP Client ID")]
+
+            public string ClientId { get; set; }
 
             [Option('p', "password", Default = "", Required = false, Hidden = true,
                 HelpText =
@@ -131,6 +137,7 @@ namespace EDPSymbologyConvertConsoleApp
             public string UniverseListFilePath { get; set; }
             public string Username { get; set; }
             public string Password { get; set; }
+            public string ClientId { get; set; }
             public string AccessToken { get; set; }
             public string RefreshToken { get; set; }
             public string AuthBaseURL { get; set; }
@@ -154,6 +161,7 @@ namespace EDPSymbologyConvertConsoleApp
                 JsonRequestFile = options.JsonRequestFile,
                 UniverseListFilePath = options.UniverseListFilePath,
                 Username = options.Username,
+                ClientId = options.ClientId,
                 Password = options.Password,
                 AccessToken = options.AccessToken,
                 RefreshToken = options.RefreshToken,

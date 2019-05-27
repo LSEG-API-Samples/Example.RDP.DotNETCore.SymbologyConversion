@@ -52,12 +52,31 @@ namespace EDPSymbologyConvertConsoleApp
                 {
                    
 
-                    Console.Write("Enter Username or Client ID:");
+                    Console.Write("Machine ID or Username(Email):");
                     appConfig.Username = Console.ReadLine();
                 }
                 else
                 {
-                    Console.WriteLine($"Username or Client ID:{appConfig.Username}");
+                    Console.WriteLine($"Machine ID or Username(Email):{appConfig.Username}");
+                }
+                if (!RegexUtilities.IsValidEmail(appConfig.Username))
+                {
+                    //assume that client use machine ID and assign machine id to client id.
+                    appConfig.ClientId = appConfig.Username;
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(appConfig.ClientId))
+                    {
+
+
+                        Console.Write("Enter Client ID:");
+                        appConfig.ClientId = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Client ID:{appConfig.ClientId}");
+                    }
                 }
 
                 if (!bCancelledLogin && string.IsNullOrEmpty(appConfig.RefreshToken) && string.IsNullOrEmpty(appConfig.Password))
@@ -83,7 +102,7 @@ namespace EDPSymbologyConvertConsoleApp
                     try
                     {
                         authToken = string.IsNullOrEmpty(appConfig.RefreshToken)
-                                        ? GetNewToken(appConfig.Username, appConfig.Password, authClient, cts.Token)
+                                        ? GetNewToken(appConfig.Username, appConfig.Password,appConfig.ClientId, authClient, cts.Token)
                                         : RefreshToken(
                                             appConfig.Username,
                                             appConfig.RefreshToken,
@@ -108,6 +127,7 @@ namespace EDPSymbologyConvertConsoleApp
                         appConfig.Username = string.Empty;
                         appConfig.Password = string.Empty;
                         appConfig.RefreshToken = string.Empty;
+                        appConfig.ClientId = string.Empty;
                         //Console.WriteLine("\nRe-enter EDP username and password or press Ctrl+C to exit");
                     }
 
@@ -272,11 +292,11 @@ namespace EDPSymbologyConvertConsoleApp
         /// <param name="client">Authorization Client object</param>
         /// <param name="cancellationToken">CancellationToken object</param>
         /// <returns></returns>
-        public static Tokenresponse GetNewToken(string username, string password, AuthorizeClient client,
+        public static Tokenresponse GetNewToken(string username, string password,string clientId, AuthorizeClient client,
             CancellationToken cancellationToken)
         {
             var tokenResult = client
-                .TokenAsync("password", username, password, "", "trapi", "", username, "", "true", "",
+                .TokenAsync("password", username, password, "", "trapi", "",clientId, "", "true", "",
                     "", cancellationToken)
                 .GetAwaiter().GetResult();
             return tokenResult.Result;
