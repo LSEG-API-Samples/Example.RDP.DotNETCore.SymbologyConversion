@@ -2,7 +2,7 @@
   "profiles": {
     "EDPSymbologyConvertConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": " --universe IBM.N --proxy 10.23.31.131:8080"
+      "commandLineArgs": " --help"
     }
   }
 }
