@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Symbology Conversion service is one of the REST API provided under the [Refinitiv Data Platform (RDP)](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
+Symbology Conversion service is one of the REST API provided under the [Refinitiv Data Platform (RDP)](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
 
 There are two parts in this article the first part is detailed about the Symbology Conversion method including details about the request and response message for the Conversion service. The second part is the details about .NET Core Console example application we create to demonstrate the Symbology API usage.
 
 ## Prerequisites
 
-* Understand concepts of RDP and basic usage of the Authorization services. Please find more details from [Developer Portal](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+* Understand concepts of RDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis/learning?content=38562&type=learning_material_item).
 
 Required software components:
 
@@ -207,7 +207,7 @@ Basically, RDP provides Swagger JSON scheme on the [APIDocs](https://apidocs.ref
 
 There are two steps the example used to request data from the Symbology Conversion service.
 
-1. Get Access Token from EDS Authentication Service as described in the following [Page](https://developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+1. Get Access Token from EDS Authentication Service as described in the following [Page](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis/learning?content=38562&type=learning_material_item/learning?content=38562&type=learning_material_item).
 2. Create JSON request body for Symbology convert method and then pass it to HttpClient class with the Access Token. And then send HTTP GET or Post to Symbology Conversion endpoint.
 
 This example uses the JSON scheme from EDS Authentication service and Symbology Conversion service to generate data model in .NET Core application. The example use [NSwagStudio tool](https://github.com/RSuter/NSwag/wiki/NSwagStudio) to generate CSharp Client and data models from the JSON Scheme files.
@@ -402,7 +402,7 @@ Connecting through Proxy Server where "10.42.52.32:80" is proxy server IP addres
 
 ### Compile and Build the example application
 
-You can download the application from [Github](https://github.com/TR-API-Samples/Example.EDP.DotNETCore.SymbologyConversion.git) and then compile and build it on Windows, Linux or macOS according to [.NET Core supported platform](https://dotnet.microsoft.com/download).
+You can download the application from [Github](https://github.com/Refinitiv-API-Samples/Example.RDP.DotNETCore.SymbologyConversion.git) and then compile and build it on Windows, Linux or macOS according to [.NET Core supported platform](https://dotnet.microsoft.com/download).
 You have to install [.NET Core SDK 2.x](https://dotnet.microsoft.com/download) and then open solution file **edpapi.sln** with Visual Studio 2017.
 Or you can compile and build the example using **dotnet buiild** or publish the project using **dotnet publish**  command.
 
@@ -411,7 +411,7 @@ You can follow the following step to publish the example project.
 1.) Clone the example project from GitHub.
 
 ```
-$ git clone https://github.com/TR-API-Samples/Example.EDP.DotNETCore.SymbologyConversion.git
+$ git clone https://github.com/Refinitiv-API-Samples/Example.RDP.DotNETCore.SymbologyConversion.git
 ```
 
 2.) Go to folder EDPSymbologyConvertConsoleApp
@@ -1041,7 +1041,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Reference
-* [Refinitiv Data Platform (RDP) Learning](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis)
+* [Refinitiv Data Platform (RDP) Learning](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis/learning?content=38562&type=learning_material_item/learning)
 * [APIDocs Swagger](https://apidocs.refinitiv.com/Apps/ApiDocs)
 * [NSwagStudio](https://github.com/RSuter/NSwag/wiki/NSwagStudio)
 * [Using NSwagStudio with ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-2.2&tabs=visual-studio%2Cvisual-studio-xml)

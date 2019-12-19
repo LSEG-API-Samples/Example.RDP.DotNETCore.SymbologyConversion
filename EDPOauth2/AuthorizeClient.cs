@@ -11,7 +11,7 @@ namespace Refinitiv.EDP.Example.AuthOauth2
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.0.14.0 (NJsonSchema v9.13.18.0 (Newtonsoft.Json v11.0.0.0))")]
     public partial class AuthorizeClient : IAuthorizeClient
     {
-        private string _baseUrl = "https://api.refinitiv.com/auth/oauth2/beta1";
+        private string _baseUrl = "https://api.refinitiv.com/auth/oauth2/v1";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
     

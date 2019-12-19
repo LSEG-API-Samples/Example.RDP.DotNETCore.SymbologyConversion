@@ -24,7 +24,7 @@ namespace EDPSymbologyConvertConsoleApp
             var appConfig = new Config();
             if (!ShowsConfigCommand(args, ref appConfig))
                 return;
-            Console.WriteLine("Start EDP(Elektron Data Platform) Symbology Convert Example application");
+            Console.WriteLine("Start RDP(Refinitiv Data Platform) Symbology Convert Example application");
             var convertRequest = ValidateAndCreateConvertRequest(appConfig);
 
             DumpAppConfig(appConfig, convertRequest);

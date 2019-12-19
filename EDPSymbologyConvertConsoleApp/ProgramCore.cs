@@ -42,7 +42,7 @@ namespace EDPSymbologyConvertConsoleApp
             {
                
 
-                Console.WriteLine("\nSignin to EDP(Elektron Data Platform) Press Ctrl+C to cancel");
+                Console.WriteLine("\nSignin to RDP(Refinitiv Data Platform) Press Ctrl+C to cancel");
                 Console.WriteLine("=============================");
 
 
@@ -59,25 +59,23 @@ namespace EDPSymbologyConvertConsoleApp
                 {
                     Console.WriteLine($"Machine ID or Username(Email):{appConfig.Username}");
                 }
-                if (!RegexUtilities.IsValidEmail(appConfig.Username))
-                {
+                //if (!RegexUtilities.IsValidEmail(appConfig.Username))
+                //{
                     //assume that client use machine ID and assign machine id to client id.
-                    appConfig.ClientId = appConfig.Username;
+                //    appConfig.ClientId = appConfig.Username;
+               //}
+                //else
+                //{
+                if (string.IsNullOrEmpty(appConfig.ClientId))
+                {
+                    Console.Write("Enter Client ID/AppKey:");
+                    appConfig.ClientId = Console.ReadLine();
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(appConfig.ClientId))
-                    {
-
-
-                        Console.Write("Enter Client ID:");
-                        appConfig.ClientId = Console.ReadLine();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Client ID:{appConfig.ClientId}");
-                    }
+                    Console.WriteLine($"Client ID:{appConfig.ClientId}");
                 }
+                //}
 
                 if (!bCancelledLogin && string.IsNullOrEmpty(appConfig.RefreshToken) && string.IsNullOrEmpty(appConfig.Password))
                 {

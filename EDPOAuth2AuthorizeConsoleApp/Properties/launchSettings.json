@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "EDPOAuth2AuthorizeConsoleApp": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Sockets;
-using Refinitiv.EDP.Example;
 using Refinitiv.EDP.Example.AuthOauth2;
 
-namespace EDPOAuth2AuthorizeConsoleApp
+namespace RDPOAuth2AuthorizeConsoleApp
 {
     class Program
     {
         // Set the EDP Username and Password before building the application
-        const string edpUsername = "<EDP Username(Email)>";
+        const string rdpUsername = "<RDP Username(Email)>";
         private const string clientid = "<Client ID/App ID>";
-        const string edpPassword = "<EDP Password>";
+        const string rdpPassword = "<RDP Password>";
 
         static void Main(string[] args)
         {
@@ -19,12 +17,12 @@ namespace EDPOAuth2AuthorizeConsoleApp
             using (var client = new HttpClient())
             {
                 var authClient = new AuthorizeClient(client);
-                Console.WriteLine($"Requesting Authorize Token for ClientID {edpUsername} from EDP server\n");
-                var authToken = GetToken(edpUsername, edpPassword, authClient);
+                Console.WriteLine($"Requesting Authorize Token for ClientID {rdpUsername} from RDP server\n");
+                var authToken = GetToken(rdpUsername, rdpPassword, authClient);
                 DumpToken(authToken);
                 Console.WriteLine($"\n\nPress any key to refresh the Token: {authToken.Refresh_token}\n");
                 Console.ReadKey();
-                authToken=RefreshToken(edpUsername,authToken.Refresh_token,authClient);
+                authToken=RefreshToken(rdpUsername,authToken.Refresh_token,authClient);
                 DumpToken(authToken);
 
             }
@@ -59,8 +57,8 @@ namespace EDPOAuth2AuthorizeConsoleApp
             return null;
         }
         /// <summary>Used to refresh an access token</summary>
-        /// <param name="username">The resource owner username (typically ClientID/EDP Username).</param>
-        /// <param name="refreshToken">The refreshToken used to get a new Access Token from the EDP Server.</param>
+        /// <param name="username">The resource owner username (typically ClientID/RDP Username).</param>
+        /// <param name="refreshToken">The refreshToken used to get a new Access Token from the RDP Server.</param>
         /// <param name="client">The AuthorizeClient object. Internal codes will call TokenAsync from the AuthorizeClient class to request a new token</param>
         /// <returns><see cref="Tokenresponse"/></returns>
         /// <exception cref="EDPAuthorizeException">A server side error occurred. Internal code will catch the exception and print to console output</exception>
