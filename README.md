@@ -1,14 +1,14 @@
-# Using EDP Symbology Conversion Service with .NET Core
+# Using RDP Symbology Conversion Service with .NET Core
 
 ## Introduction
 
-Symbology Conversion service is one of the REST API provided under the [Elektron Data Platform (EDP)](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
+Symbology Conversion service is one of the REST API provided under the [Refinitiv Data Platform (RDP)](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
 
 There are two parts in this article the first part is detailed about the Symbology Conversion method including details about the request and response message for the Conversion service. The second part is the details about .NET Core Console example application we create to demonstrate the Symbology API usage.
 
 ## Prerequisites
 
-* Understand concepts of EDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+* Understand concepts of RDP and basic usage of the Authorization services. Please find more details from [Developer Portal](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
 
 Required software components:
 
@@ -33,11 +33,11 @@ The convert method takes two parameters:
 
 * **Universe** (required): This takes a comma-separated list of input symbols or identifiers. Currently, maximum input symbols in the list are **100** items.
 
-* **To** (optional): This takes a comma-separated list of return fields. If not specified the convert method returns all matching return fields. Please refer to  [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) page for available field list and JSON schema for the service.
+* **To** (optional): This takes a comma-separated list of return fields. If not specified the convert method returns all matching return fields. Please refer to  [APIDocs](https://apidocs.refinitiv.com/Apps/ApiDocs) page for available field list and JSON schema for the service.
 
 ### Model
 
-Below is a model of a GET Request and Post Request message. Note that the endpoint we use in this article based on the beta version of the EDP.
+Below is a model of a GET Request and Post Request message. Note that the endpoint we use in this article based on the beta version of the RDP.
 
 #### GET REQUEST
 
@@ -103,13 +103,13 @@ When a field list is specified for the To parameter the convert method converts 
 #### GET REQUEST Sample
 
 ```URL
-https://api.edp.thomsonreuters.com/data/symbology/beta1/convert?universe=IBM.N@RIC&from=RIC&to=ISIN,CUSIP
+https://api.refinitiv.com/data/symbology/beta1/convert?universe=IBM.N@RIC&from=RIC&to=ISIN,CUSIP
 ```
 
 #### POST REQUEST Sample
 
 ````Json
-Endpoint URL: https://api.edp.thomsonreuters.com/data/symbology/beta1/convert
+Endpoint URL: https://api.refinitiv.com/data/symbology/beta1/convert
 JSON request body:
 {
     "universe":["IBM.N","TRI.N"],
@@ -119,7 +119,7 @@ JSON request body:
 
 ### Symbology Response Instrument Field
 
-Basically, the collection format of the Conversion response is Comma-separated values(CSV) according to Swagger JSON scheme for Symbology Convert from the [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) website.
+Basically, the collection format of the Conversion response is Comma-separated values(CSV) according to Swagger JSON scheme for Symbology Convert from the [APIDocs](https://apidocs.refinitiv.com/Apps/ApiDocs) website.
 
 The following JSON data is a sample of the response message from the Convert method. Please refer to a full JSON scheme for an additional field provided by the service.
 
@@ -201,13 +201,13 @@ This section describing the implementation of .NET Core example which is a conso
 
 ### Create Data Model
 
-Basically, EDP provides Swagger JSON scheme on the [APIDocs](https://apidocs.edp.thomsonreuters.com/Apps/ApiDocs) website. The developer can download the JSON scheme and use it as a reference to create a request and response message. The JSON scheme also describes the data model used by the services. Below screenshot is the Symbology service Swagger page.
+Basically, RDP provides Swagger JSON scheme on the [APIDocs](https://apidocs.refinitiv.com/Apps/ApiDocs) website. The developer can download the JSON scheme and use it as a reference to create a request and response message. The JSON scheme also describes the data model used by the services. Below screenshot is the Symbology service Swagger page.
 
 ![Symbology Convert JSON Scheme](/images/swaggerjsonscheme.png)
 
 There are two steps the example used to request data from the Symbology Conversion service.
 
-1. Get Access Token from EDS Authentication Service as described in the following [Page](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
+1. Get Access Token from EDS Authentication Service as described in the following [Page](https://developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis/learning?content=38562&type=learning_material_item).
 2. Create JSON request body for Symbology convert method and then pass it to HttpClient class with the Access Token. And then send HTTP GET or Post to Symbology Conversion endpoint.
 
 This example uses the JSON scheme from EDS Authentication service and Symbology Conversion service to generate data model in .NET Core application. The example use [NSwagStudio tool](https://github.com/RSuter/NSwag/wiki/NSwagStudio) to generate CSharp Client and data models from the JSON Scheme files.
@@ -351,7 +351,7 @@ For the output, the example will print the headers and its data to console outpu
 #### Usage
 
 The following list is the command line options generated by the application.
-It uses C# [Commandline Parser](https://github.com/commandlineparser/commandline) to generate the help page and manage the command line arguments. There are sample usage and options that the user can specify when running and setting the command line argument. Note that if you have to connect to the EDP Server through your proxy server you might need to specify the proxy server using --proxy command line option.
+It uses C# [Commandline Parser](https://github.com/commandlineparser/commandline) to generate the help page and manage the command line arguments. There are sample usage and options that the user can specify when running and setting the command line argument. Note that if you have to connect to the RDP Server through your proxy server you might need to specify the proxy server using --proxy command line option.
 
 ```
 $./EDPSymbologyConvert --help
@@ -455,7 +455,7 @@ The publish command generate application named **EDPSymbologyConvert** under the
 
 ## Running the example
 
-To test the example you must have a valid EDP username and password with permission to access Symbology Conversion service. 
+To test the example you must have a valid RDP username and password with permission to access Symbology Conversion service. 
 The following command used to request the data for RIC **IBM.N**, CUSIP **037833100** and ISIN **TH0001010014**. A user may use -o to specify a new CSV file name to save the data.
 
 A user may also use **--verbose** to print additional output such as the JSON request and response.
@@ -470,7 +470,7 @@ Below sample is output when you run the command line. It will return three sets 
 
 ```
 $./EDPSymbologyConvert --universe IBM.N,037833100,TH0001010014 -o csvoutputIBM.csv --verbose
-Start EDP(Elektron Data Platform) Symbology Convert Example application
+Start RDP(Refinitiv Data Platform) Symbology Convert Example application
 ========= Application Configuration List =============
 Universe:IBM.N,037833100,TH0001010014
 ToEnum:
@@ -478,12 +478,12 @@ Use Json File: False
 Export to CSV File:csvoutputIBM.csv True
 ======================================================
 
-Signin to EDP(Elektron Data Platform) Press Ctrl+C to cancel
+Signin to RDP(RDP Data Platform) Press Ctrl+C to cancel
 =============================
 Enter Username:GE-A-01103xxxxxxx
 Enter Password:*****************
 =============================
-Logging in to the EDP server, please wait
+Logging in to the RDP server, please wait
 
 Login Success!
 *************Token Details**************
@@ -493,7 +493,7 @@ RefreshToken=******
 Scope=trapi.admin.accounts trapi.admin.accounts.groups trapi.admin.accounts.licenses trapi.admin.accounts.users trapi.alerts.news-headlines.crud trapi.alerts.news-stories.crud trapi.alerts.news.crud trapi.alerts.research.crud trapi.auth.cloud-credentials trapi.cfs.claimcheck.read trapi.cfs.claimcheck.write trapi.cfs.publisher.read trapi.cfs.publisher.setup.write trapi.cfs.publisher.stream.write trapi.cfs.publisher.write trapi.cfs.subscriber.read trapi.data.3pri.test.read trapi.data.aggregates.read trapi.data.api.test trapi.data.esg.bulk.read trapi.data.esg.metadata.read trapi.data.esg.read trapi.data.esg.universe.read trapi.data.esg.views-basic.read trapi.data.esg.views-measures-full.read trapi.data.esg.views-measures-standard.read trapi.data.esg.views-measures.read trapi.data.esg.views-scores-full.read trapi.data.esg.views-scores-standard.read trapi.data.esg.views-scores.read trapi.data.historical-pricing.events.read trapi.data.historical-pricing.read trapi.data.historical-pricing.summaries.read trapi.data.news-story-viewer.read trapi.data.news.read trapi.data.portfolios.read trapi.data.portfolios.write trapi.data.pricing.read trapi.data.quantitative-analytics.read trapi.data.research.read trapi.data.symbology.bulk.read trapi.data.symbology.read trapi.deployment.crud trapi.metadata.read trapi.streaming.pricing.read
 TokenType=Bearer
 ****************************************
-Retrieving data from EDP Symbology Conversion service...
+Retrieving data from RDP Symbology Conversion service...
 ======== JSon Request Body =======
 {
   "to": [],
@@ -1026,7 +1026,7 @@ Writing data to csvoutputIBM.csv complete
 
 ## Summary
 
-This article explains the usage of Symbology Conversion service. It also provides an example application to demonstrate the usage of Authentication and Symbology convert method. The example can convert a symbol or list of symbols to a specified output type. EDP API user can use the example application to test the service and apply the codes from the example with another service on the EDP.
+This article explains the usage of Symbology Conversion service. It also provides an example application to demonstrate the usage of Authentication and Symbology convert method. The example can convert a symbol or list of symbols to a specified output type. RDP API user can use the example application to test the service and apply the codes from the example with another service on the RDP.
 
 ## Contributing
 
@@ -1041,8 +1041,8 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Reference
-* [Elektron Data Platform (EDP) Learning](https://developers.thomsonreuters.com/elektron-data-platform/elektron-data-platform-apis/learning)
-* [APIDocs Swagger](https://apidocs.edp.thomsonreuters.com/)
+* [Refinitiv Data Platform (RDP) Learning](developers.refinitiv.com/elektron-data-platform/elektron-data-platform-apis)
+* [APIDocs Swagger](https://apidocs.refinitiv.com/Apps/ApiDocs)
 * [NSwagStudio](https://github.com/RSuter/NSwag/wiki/NSwagStudio)
 * [Using NSwagStudio with ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-2.2&tabs=visual-studio%2Cvisual-studio-xml)
 * [Dotnet Core Publish Command](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21)
