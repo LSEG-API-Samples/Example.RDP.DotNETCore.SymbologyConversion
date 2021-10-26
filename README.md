@@ -2,13 +2,15 @@
 
 ## Introduction
 
-Symbology Conversion service is one of the REST API provided under the [Refinitiv Data Platform (RDP)](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
+**Update**: October 2021
+
+Symbology Conversion service is one of the REST API provided under the [Refinitiv Data Platform](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) (RDP - formerly known as EDP). It leverages existing services that underly Refinitiv products, to create an aggregated list of functionality needed in the Symbology service. The Conversion method allows users to convert identifiers from one type to another. For example, the user can use the Conversion method to convert ISIN or CUSIP to Refinitiv RIC with additional information about the company.
 
 There are two parts in this article the first part is detailed about the Symbology Conversion method including details about the request and response message for the Conversion service. The second part is the details about .NET Core Console example application we create to demonstrate the Symbology API usage.
 
 ## Prerequisites
 
-* Understand concepts of RDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis/learning?content=38562&type=learning_material_item).
+* Understand concepts of RDP and basic usage of the Authorization services. Please find more details from [Developer Portal](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials).
 
 Required software components:
 
@@ -1041,7 +1043,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Reference
-* [Refinitiv Data Platform (RDP) Learning](https://developers.refinitiv.com/refinitiv-data-platform/refinitiv-data-platform-apis/learning?content=38562&type=learning_material_item/learning)
+* [Refinitiv Data Platform (RDP) Learning](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials)
 * [APIDocs Swagger](https://apidocs.refinitiv.com/Apps/ApiDocs)
 * [NSwagStudio](https://github.com/RSuter/NSwag/wiki/NSwagStudio)
 * [Using NSwagStudio with ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-2.2&tabs=visual-studio%2Cvisual-studio-xml)
